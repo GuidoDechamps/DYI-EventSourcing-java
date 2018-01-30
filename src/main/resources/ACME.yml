@@ -1,0 +1,48 @@
+"Events":
+    "CustomerStartedShopping":
+      "customerId": "string"
+      "cartId": "string"
+
+    "ProductWasAddedToCart":
+      "customerId": "string"
+      "cartId": "string"
+      "productId": "string"
+
+    "ProductWasRemovedFromCart":
+      "customerId": "string"
+      "cartId": "string"
+      "productId": "string"
+
+    "CustomerPlacedOrder":
+      "customerId": "string"
+      "orderId": "string"
+
+    "CustomerAbandonedCart":
+      "customerId": "string"
+      "cartId": "string"
+
+
+"Commands":
+    "StartShopping":
+      "customerId": "string"
+      "cartId": "string"
+      "startTime": "string"
+
+    "AddProductToCart":
+      "customerId": "string"
+      "cartId": "string"
+      "sku": "string"
+      "addTime": "string"
+
+    "RemoveProductFromCart":
+      "customerId": "string"
+      "cartId": "string"
+      "productId": "string"
+
+    "PlaceOrder":
+      "customerId": "string"
+      "cartId": "string"
+
+    "AbandonOrder":
+      "customerId": "string"
+      "cartId": "string"
