@@ -9,49 +9,36 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 class CodeGenerator {
-    private static final String EVENTS_PACKAGE = "be.tripled.io.dyi.events";
-    private static final String COMMANDS_PACKAGE = "be.tripled.io.dyi.commands";
+    private final Configuration configuration;
     private String currentGenerationPackage = "unknown";
-    private String eventsOutputFilePath = ".//src//main//java//be//tripled//io/dyi//events//";
-    private String commandsOutputFilePath = ".//src//main//java//be//tripled//io/dyi//commands//";
-    private String outputFilePath = eventsOutputFilePath;
+    private String outputFilePath;
     private ClassGenerator classGenerator = ClassGenerator.classGenerator();
 
-    public static void main(String... args) throws IOException {
-        final String fileName = getFileName(args);
-        final File file = new File(fileName);
-        if (file.canRead()) {
-            new CodeGenerator().generateCode(file);
-        } else
-            System.out.println("[ERROR] Unable to read file " + fileName + " from " + file.getAbsolutePath());
+    CodeGenerator(Configuration configuration) {
+        this.configuration = configuration;
+        this.outputFilePath = configuration.eventsOutputPath;
     }
 
-    private static String getFileName(String... args) {
-        if (args.length == 0) {
-            System.out.println("[ERROR] No YAML file name given");
-            System.exit(-1);
-        }
-        return args[0];
-    }
-
-    private static void quit() {
-        System.out.println("--------");
-        System.out.println("The end");
-        System.exit(1);
-    }
-
-    private void generateCode(File file) throws IOException {
+    void generateCode(File file) throws IOException {
         final YAMLFactory factory = new YAMLFactory();
         final YAMLParser parser = factory.createParser(file);
-        while (true)
-            processNextToken(parser);
+        while (processNextToken(parser)) ;
     }
 
-    private void processNextToken(YAMLParser parser) throws IOException {
+    private static boolean quit() {
+        System.out.println("--------");
+        System.out.println("The end");
+        return false;
+    }
+
+    private boolean processNextToken(YAMLParser parser) throws IOException {
         final JsonToken jsonToken = parser.nextValue();
         if (jsonToken == null)
-            quit();
-        processToken(parser, jsonToken);
+            return quit();
+        else {
+            processToken(parser, jsonToken);
+            return true;
+        }
     }
 
     private void processToken(YAMLParser parser, JsonToken jsonToken) throws IOException {
@@ -63,16 +50,17 @@ class CodeGenerator {
             case END_OBJECT:
                 processEndToken(parser);
                 break;
-            case FIELD_NAME:
-                System.out.println("Field name " + parser.getCurrentName());
-                break;
             case VALUE_STRING:
-                System.out.println("Field value " + parser.getCurrentName() + " : " + parser.getText());
-                classGenerator.withFieldName(parser.getCurrentName());
+                processValue(parser);
                 break;
             default:
                 System.out.println("Ignoring " + jsonToken);
         }
+    }
+
+    private void processValue(YAMLParser parser) throws IOException {
+        System.out.println("Field value " + parser.getCurrentName() + " : " + parser.getText());
+        classGenerator.withFieldName(parser.getCurrentName());
     }
 
     private void processEndToken(YAMLParser parser) throws IOException {
@@ -86,7 +74,6 @@ class CodeGenerator {
             final String classText = classGenerator.generate();
             final String clazzName = parser.getCurrentName();
             writeTextToFile(classText, clazzName);
-            System.out.println("Writing " + clazzName + ".java with content " + classText.length());
             classGenerator = null;
         }
     }
@@ -101,11 +88,11 @@ class CodeGenerator {
     private void processStartToken(YAMLParser parser) throws IOException {
         System.out.println("Started " + parser.getCurrentName());
         if (isEvents(parser)) {
-            currentGenerationPackage = EVENTS_PACKAGE;
-            outputFilePath=eventsOutputFilePath;
+            currentGenerationPackage = configuration.eventsPackage;
+            outputFilePath = configuration.eventsOutputPath;
         } else if (isCommands(parser)) {
-            currentGenerationPackage = COMMANDS_PACKAGE;
-            outputFilePath=commandsOutputFilePath;
+            currentGenerationPackage = configuration.commandsPackage;
+            outputFilePath = configuration.commandsOutputPath;
         } else {
             classGenerator = ClassGenerator.classGenerator();
             classGenerator.withName(parser.getCurrentName());
@@ -129,5 +116,7 @@ class CodeGenerator {
         return events
                 .equalsIgnoreCase(parser.getCurrentName());
     }
+
+
 
 }
