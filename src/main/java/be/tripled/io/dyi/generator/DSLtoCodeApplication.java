@@ -9,6 +9,13 @@ class DSLtoCodeApplication {
     private static final String EVENTS_OUTPUT_FILE_PATH = ".//src//main//java//be//tripled//io/dyi//events//";
     private static final String COMMANDS_OUTPUT_FILE_PATH = ".//src//main//java//be//tripled//io/dyi//commands//";
 
+    /**
+     * Run the application with the path to the YAML file.
+     * For example ./src/main/resources/ACME.yml
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String... args) throws IOException {
         final String fileName = getFileName(args);
         final File file = new File(fileName);
