@@ -1,12 +1,12 @@
 "Events":
     "CustomerStartedShopping":
-      "customerId": "string"
-      "cartId": "string"
+        "customerId": "string"
+        "cartId": "string"
 
     "ProductWasAddedToCart":
-      "customerId": "string"
-      "cartId": "string"
-      "productId": "string"
+        "customerId": "string"
+        "cartId": "string"
+        "productId": "string"
 
     "ProductWasRemovedFromCart":
       "customerId": "string"
