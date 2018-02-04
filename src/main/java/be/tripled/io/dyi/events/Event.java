@@ -1,0 +1,1 @@
+package be.tripled.io.dyi.events;public interface Event {}

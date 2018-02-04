@@ -1,0 +1,1 @@
+package be.tripled.io.dyi.commands;public interface Command {}

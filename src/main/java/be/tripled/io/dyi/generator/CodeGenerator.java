@@ -59,12 +59,10 @@ class CodeGenerator {
     }
 
     private void processValue(YAMLParser parser) throws IOException {
-        System.out.println("Field value " + parser.getCurrentName() + " : " + parser.getText());
         dtoGenerator.withFieldName(parser.getCurrentName());
     }
 
     private void processEndToken(YAMLParser parser) throws IOException {
-        System.out.println("Ended " + parser.getCurrentName());
         if (isEvents(parser)) {
         } else if (isCommands(parser)) {
 
@@ -76,7 +74,24 @@ class CodeGenerator {
     }
 
     private void handleEndFile() {
+        generateSpecificationInterface();
         System.out.println("--EndFile--");
+    }
+
+    private void generateSpecificationInterface() {
+        this.outputFilePath = configuration.specificationOutputPath;
+        writeTextToFile(
+                "package " + configuration.specificationPackage + ";" +
+                        "import " + configuration.commandsPackage + "." + configuration.commandsMarkerInterface + ";" +
+                        "import " + configuration.eventsPackage + "." + configuration.eventsMarkerInterface + ";" +
+                        "import java.util.Collection;" +
+                        "public interface Specification {" +
+                        "    Specification given(Event... events);" +
+                        "    Specification given(Collection<Event> events);" +
+                        "    Specification when(Command command);" +
+                        "    void then(Event... events);" +
+                        "    void then(Collection<Event> events);" +
+                        "}", "Specification");
     }
 
     private void handleEndDTO(YAMLParser parser) throws IOException {
@@ -86,11 +101,16 @@ class CodeGenerator {
         dtoGenerator = null;
     }
 
-    private void writeTextToFile(String classText, String clazzName) throws IOException {
+    private void writeTextToFile(String classText, String clazzName) {
         final String fileName = outputFilePath + clazzName + ".java";
-        final FileWriter fileWriter = new FileWriter(fileName);
-        fileWriter.write(classText);
-        fileWriter.close();
+        final FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter(fileName);
+            fileWriter.write(classText);
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to write file " + clazzName);
+        }
     }
 
     private void processStartToken(YAMLParser parser) throws IOException {

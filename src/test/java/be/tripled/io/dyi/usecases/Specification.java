@@ -1,4 +1,4 @@
-package be.tripled.io.dyi.usecase;
+package be.tripled.io.dyi.usecases;
 
 import be.tripled.io.dyi.commands.Command;
 import be.tripled.io.dyi.events.Event;
@@ -6,7 +6,6 @@ import be.tripled.io.dyi.events.Event;
 import java.util.Collection;
 
 public interface Specification {
-
     Specification given(Event... events);
 
     Specification given(Collection<Event> events);

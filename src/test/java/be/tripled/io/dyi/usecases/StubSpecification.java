@@ -1,4 +1,4 @@
-package be.tripled.io.dyi.usecase;
+package be.tripled.io.dyi.usecases;
 
 import be.tripled.io.dyi.commands.Command;
 import be.tripled.io.dyi.events.Event;

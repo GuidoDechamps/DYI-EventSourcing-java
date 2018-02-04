@@ -3,6 +3,7 @@ package be.tripled.io.dyi.generator;
 class Configuration {
     final String eventsOutputPath;
     final String specificationOutputPath;
+    final String specificationPackage;
     final String eventsPackage;
     final String commandsPackage;
     final String commandsOutputPath;
@@ -12,6 +13,7 @@ class Configuration {
     private Configuration(Builder builder) {
         eventsOutputPath = builder.eventsOutputPath;
         specificationOutputPath = builder.specificationOutputPath;
+        specificationPackage = builder.specificationPackage;
         eventsPackage = builder.eventsPackage;
         commandsPackage = builder.commandsPackage;
         commandsOutputPath = builder.commandsOutputPath;
@@ -26,6 +28,7 @@ class Configuration {
     public static final class Builder {
         private String eventsOutputPath;
         private String specificationOutputPath;
+        private String specificationPackage;
         private String eventsPackage;
         private String commandsPackage;
         private String commandsOutputPath;
@@ -42,6 +45,11 @@ class Configuration {
 
         public Builder withSpecificationOutputPath(String val) {
             specificationOutputPath = val;
+            return this;
+        }
+
+        public Builder withSpecificationPackage(String val) {
+            specificationPackage = val;
             return this;
         }
 
