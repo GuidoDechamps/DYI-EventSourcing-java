@@ -41,7 +41,7 @@ class CodeGenerator {
         }
     }
 
-    private void processToken(YAMLParser parser, JsonToken jsonToken) throws IOException {
+    private void processToken(YAMLParser parser, JsonToken jsonToken) {
 
         switch (jsonToken) {
             case START_OBJECT:
@@ -58,11 +58,11 @@ class CodeGenerator {
         }
     }
 
-    private void processValue(YAMLParser parser) throws IOException {
-        dtoGenerator.withFieldName(parser.getCurrentName());
+    private void processValue(YAMLParser parser) {
+        dtoGenerator.withFieldName(getCurrentName(parser));
     }
 
-    private void processEndToken(YAMLParser parser) throws IOException {
+    private void processEndToken(YAMLParser parser) {
         if (isEvents(parser)) {
         } else if (isCommands(parser)) {
 
@@ -75,7 +75,6 @@ class CodeGenerator {
 
     private void handleEndFile() {
         generateSpecificationInterface();
-        System.out.println("--EndFile--");
     }
 
     private void generateSpecificationInterface() {
@@ -94,9 +93,9 @@ class CodeGenerator {
                         "}", "Specification");
     }
 
-    private void handleEndDTO(YAMLParser parser) throws IOException {
+    private void handleEndDTO(YAMLParser parser) {
         final String classText = dtoGenerator.generate();
-        final String clazzName = parser.getCurrentName();
+        final String clazzName = getCurrentName(parser);
         writeTextToFile(classText, clazzName);
         dtoGenerator = null;
     }
@@ -113,7 +112,7 @@ class CodeGenerator {
         }
     }
 
-    private void processStartToken(YAMLParser parser) throws IOException {
+    private void processStartToken(YAMLParser parser) {
         if (isEvents(parser)) {
             handleStartEventSection();
         } else if (isCommands(parser)) {
@@ -123,54 +122,62 @@ class CodeGenerator {
         }
     }
 
-    private void handleStartDTO(YAMLParser parser) throws IOException {
+    private void handleStartDTO(YAMLParser parser) {
         dtoGenerator = DTOGenerator.create();
-        dtoGenerator.withName(parser.getCurrentName());
+        dtoGenerator.withName(getCurrentName(parser));
         dtoGenerator.withPackage(currentGenerationPackage);
         dtoGenerator.withMarkerInterface(currentMarkerInterface);
     }
 
-    private void handleStartCommandSection() throws IOException {
+    private void handleStartCommandSection() {
         currentGenerationPackage = configuration.commandsPackage;
         currentMarkerInterface = configuration.commandsMarkerInterface;
         outputFilePath = configuration.commandsOutputPath;
         generateCommandMarkerInterface();
     }
 
-    private void handleStartEventSection() throws IOException {
+    private void handleStartEventSection() {
         currentGenerationPackage = configuration.eventsPackage;
         currentMarkerInterface = configuration.eventsMarkerInterface;
         outputFilePath = configuration.eventsOutputPath;
         generateEventMarkerInterface();
     }
 
-    private void generateEventMarkerInterface() throws IOException {
+    private void generateEventMarkerInterface() {
         writeTextToFile("package " + configuration.eventsPackage + ";" + "public interface " +
                 configuration.eventsMarkerInterface +
                 " {}", configuration.eventsMarkerInterface);
     }
 
-    private void generateCommandMarkerInterface() throws IOException {
+    private void generateCommandMarkerInterface() {
         writeTextToFile("package " + configuration.commandsPackage + ";" + "public interface " +
                 configuration.commandsMarkerInterface +
                 " {}", configuration.commandsMarkerInterface);
     }
 
-    private boolean isCommands(YAMLParser parser) throws IOException {
+    private boolean isCommands(YAMLParser parser) {
         return isCurrentName(parser, "commands");
     }
 
-    private boolean isEndFile(YAMLParser parser) throws IOException {
-        return parser.getCurrentName() == null;
+    private boolean isEndFile(YAMLParser parser) {
+        return getCurrentName(parser) == null;
     }
 
-    private boolean isEvents(YAMLParser parser) throws IOException {
-        return isCurrentName(parser, "Events");
+    private boolean isEvents(YAMLParser parser) {
+        return isCurrentName(parser, "events");
     }
 
-    private boolean isCurrentName(YAMLParser parser, String events) throws IOException {
+    private boolean isCurrentName(YAMLParser parser, String events) {
         return events
-                .equalsIgnoreCase(parser.getCurrentName());
+                .equalsIgnoreCase(getCurrentName(parser));
+    }
+
+    private String getCurrentName(YAMLParser parser) {
+        try {
+            return parser.getCurrentName();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

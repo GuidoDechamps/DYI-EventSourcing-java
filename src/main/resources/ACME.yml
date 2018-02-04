@@ -1,12 +1,12 @@
-"Events":
-    "CustomerStartedShopping":
-        "customerId": "string"
-        "cartId": "string"
+Events:
+    CustomerStartedShopping:
+        customerId: "string"
+        cartId: "string"
 
-    "ProductWasAddedToCart":
-        "customerId": "string"
-        "cartId": "string"
-        "productId": "string"
+    ProductWasAddedToCart:
+        customerId: "string"
+        cartId: "string"
+        productId: "string"
 
     "ProductWasRemovedFromCart":
       "customerId": "string"
@@ -22,11 +22,11 @@
       "cartId": "string"
 
 
-"Commands":
-    "StartShopping":
-      "customerId": "string"
-      "cartId": "string"
-      "startTime": "string"
+Commands:
+    StartShopping:
+      customerId: "string"
+      cartId: "string"
+      startTime: "string"
 
     "AddProductToCart":
       "customerId": "string"

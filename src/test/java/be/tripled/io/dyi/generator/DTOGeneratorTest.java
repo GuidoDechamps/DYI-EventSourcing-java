@@ -13,8 +13,8 @@ class DTOGeneratorTest {
                                                 .withName("ExampleClass")
                                                 .withFieldName("customerId")
                                                 .withFieldName("otherStuff")
+                                                .withMarkerInterface("Event")
                                                 .generate();
-        System.out.println(exampleClass);
         assertTrue(exampleClass.contains("customerId"));
     }
 }
