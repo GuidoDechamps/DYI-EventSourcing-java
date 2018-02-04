@@ -8,6 +8,8 @@ class DSLtoCodeApplication {
     private static final String COMMANDS_PACKAGE = "be.tripled.io.dyi.commands";
     private static final String EVENTS_OUTPUT_FILE_PATH = ".//src//main//java//be//tripled//io/dyi//events//";
     private static final String COMMANDS_OUTPUT_FILE_PATH = ".//src//main//java//be//tripled//io/dyi//commands//";
+    private static final String EVENT = "Event";
+    private static final String COMMAND = "Command";
 
     /**
      * Run the application with the path to the YAML file.
@@ -31,6 +33,8 @@ class DSLtoCodeApplication {
                             .withCommandsPackage(COMMANDS_PACKAGE)
                             .withEventsOutputPath(EVENTS_OUTPUT_FILE_PATH)
                             .withEventsPackage(EVENTS_PACKAGE)
+                            .withEventsMarkerInterface(EVENT)
+                            .withCommandsMarkerInterface(COMMAND)
                             .build();
     }
 

@@ -2,25 +2,25 @@ package be.tripled.io.dyi.commands;
 
 /**
  * Generated class from dsl file. Do not add own logic.
- * Generate Builders through IDE.
  */
-public class AddProductToCart {
-
+public class AddProductToCart implements Command {
     public final String customerId;
     public final String cartId;
     public final String sku;
     public final String addTime;
 
-    private AddProductToCart(Builder builder) {
+    private AddProductToCart(AddProductToCart.Builder builder) {
         customerId = builder.customerId;
         cartId = builder.cartId;
         sku = builder.sku;
         addTime = builder.addTime;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    public static AddProductToCart.Builder newBuilder() {
+        return new AddProductToCart.Builder();
     }
+
+    ;
 
     public static final class Builder {
         private String customerId;
@@ -28,25 +28,22 @@ public class AddProductToCart {
         private String sku;
         private String addTime;
 
-        private Builder() {
-        }
-
-        public Builder withCustomerId(String val) {
+        public AddProductToCart.Builder withcustomerId(String val) {
             customerId = val;
             return this;
         }
 
-        public Builder withCartId(String val) {
+        public AddProductToCart.Builder withcartId(String val) {
             cartId = val;
             return this;
         }
 
-        public Builder withSku(String val) {
+        public AddProductToCart.Builder withsku(String val) {
             sku = val;
             return this;
         }
 
-        public Builder withAddTime(String val) {
+        public AddProductToCart.Builder withaddTime(String val) {
             addTime = val;
             return this;
         }
